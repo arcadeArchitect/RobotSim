@@ -1,0 +1,34 @@
+{
+    "name": "RobotActions",
+    "maps": [
+        {
+            "name": "driver",
+            "id": "1cc4557f-79ad-4b2f-a365-a4b03b3833f5",
+            "actions": [
+                {
+                    "name": "move",
+                    "type": "Value",
+                    "id": "b9670f8f-81a8-4363-a373-839503b47e69",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2e791ef5-451b-46d5-8f54-1eafbec01f5f",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
