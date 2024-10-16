@@ -11,5 +11,6 @@ public class Events : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 value = context.ReadValue<Vector2>();
+        PrintVector(value);
     }
 }
