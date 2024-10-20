@@ -5,29 +5,32 @@ using UnityEngine;
 
 public class WheelBehavior : MonoBehaviour
 {
-    private WheelCollider _wc;
-    private Transform _visualWheel;
+    private WheelCollider wc;
+    private Transform visualWheel;
 
     void Start()
     {
-        if (this.transform.childCount == 0) {
+        if (transform.childCount == 0) {
             Debug.Log("need child wheel");  
             return;
         }
-        _wc = gameObject.GetComponent<WheelCollider>();
-        _visualWheel = this.transform.GetChild(0);
+        wc = gameObject.GetComponent<WheelCollider>();
+        visualWheel = transform.GetChild(0);
     }
 
     public void FixedUpdate() 
     {
+        wc.steerAngle = this.transform.localEulerAngles.y;
 
-        _wc.steerAngle = this.transform.localEulerAngles.y;
-
-        if (_wc) {
-            _wc.GetWorldPose(out var position, out var rotation);
-            _visualWheel.transform.position = position;
-            _visualWheel.transform.rotation = rotation;
-            _wc.rotationSpeed = 360;
+        if (wc) {
+            wc.GetWorldPose(out var position, out var rotation);
+            visualWheel.transform.position = position;
+            visualWheel.transform.rotation = rotation;
         }
+    }
+
+    public void SetTorque(float torque)
+    {
+        wc.motorTorque = torque;
     }
 }
