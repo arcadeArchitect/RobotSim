@@ -6,6 +6,13 @@ public class Module : MonoBehaviour
 {
     [SerializeField] private MotorBehavior motor;
     private float input;
+    public float rotation;
+    private Transform wheel;
+
+    void Awake()
+    {
+        wheel = motor.GetWheel().transform;
+    }
 
     private void FixedUpdate()
     {
@@ -19,12 +26,55 @@ public class Module : MonoBehaviour
 
     private void SetRotation(float rotation)
     {
-        motor.GetWheel().transform.localRotation = Quaternion.Euler(0, rotation, 0);
+        wheel.localRotation = Quaternion.Euler(0, rotation, 0);
+    }
+
+    private void SetRotation(Vector3 rotation)
+    {
+        wheel.LookAt(transform.position + transform.TransformDirection(rotation));
     }
 
     public void SetInputAndRotation(float input, float rotation)
     {
         SetInput(input);
         SetRotation(rotation);
+    }
+
+    public void SetInputAndRotation(float input, Vector3 rotation)
+    {
+        SetInput(input);
+        SetRotation(rotation);
+    }
+
+    public Vector3 GetWorldPosition()
+    {
+        return transform.position;
+    }
+
+    public Vector3 GetOffset3()
+    {
+        return transform.localPosition;
+    }
+        
+    public Vector2 GetOffset()
+    {
+        Vector3 offset3 = GetOffset3();
+        return new Vector2(offset3.x, offset3.z);
+    }
+
+    public Vector3 GetForwardVector()
+    {
+        return wheel.forward;
+    }
+
+    public float GetRotation()
+    {
+        rotation = wheel.rotation.eulerAngles.y;
+        return rotation;
+    }
+
+    public Vector2 GetWheelOffset()
+    {
+        return new Vector2(wheel.localPosition.x, wheel.localPosition.z);
     }
 }

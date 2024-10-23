@@ -3,13 +3,17 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SwerveDriveRobot : MonoBehaviour
+public class SwerveDriveRobotOne : MonoBehaviour
 {
     [SerializeField] private Module frontRightModule;
     [SerializeField] private Module frontLeftModule;
     [SerializeField] private Module backRightModule;
     [SerializeField] private Module backLeftModule;
+    
     [SerializeField] private Gyro gyro;
+
+    [Space] [SerializeField] private float maxTorque = 100f;
+    [SerializeField] private float rotationSpeed = 180f * Mathf.Deg2Rad;
 
     // distance between front and rear wheels (wheelbase)
     [Space] [SerializeField] private float length;
@@ -43,6 +47,11 @@ public class SwerveDriveRobot : MonoBehaviour
     }
 
     private void SwerveDrive(Vector3 input) 
+    {
+        FirstAlgorithm(input);
+    }
+
+    private void FirstAlgorithm(Vector3 input)
     {
         // Debug.Log("Swerve Drive");
         float angle = gyro.GetRobotAngle();
