@@ -45,7 +45,7 @@ public class RobotContainer : MonoBehaviour
 
     private void Update()
     {
-        if (!isShooting || !storageSystem.CanShoot()) return;
+        if (!(isShooting && shooterSystem.CanShoot() && storageSystem.CanShoot())) return;
         Projectile projectile = storageSystem.RemoveNextProjectile();
         shooterSystem.Shoot(projectile);
     }
