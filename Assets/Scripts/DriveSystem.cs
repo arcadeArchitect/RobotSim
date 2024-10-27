@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SwerveDriveRobotThree : MonoBehaviour
+public class DriveSystem : Subsystem
 {
     [SerializeField] private Module frontRightModule;
     [SerializeField] private Module frontLeftModule;
@@ -26,12 +26,12 @@ public class SwerveDriveRobotThree : MonoBehaviour
     private Vector3 lastInput;
     private Vector2 translation;
 
-    public float frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed;
-    public float frontRightAngle, frontLeftAngle, backRightAngle, backLeftAngle;
+    private float frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed;
+    private float frontRightAngle, frontLeftAngle, backRightAngle, backLeftAngle;
 
     private void Start()
     {
-        length = frontRightModule.GetWheelOffset().y - backRightModule.GetWheelOffset().y;
+        length = frontRightModule.GetWheelOffset().z - backRightModule.GetWheelOffset().z;
         width = frontRightModule.GetWheelOffset().x - frontLeftModule.GetWheelOffset().x;
     }
 

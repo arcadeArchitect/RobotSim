@@ -143,9 +143,18 @@
                 },
                 {
                     "name": "centrism",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "38b23ce4-3b14-4d8c-8762-36fe0347cd61",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "DiscreteButton",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "shoot",
+                    "type": "PassThrough",
+                    "id": "d539d8c9-17b3-4952-9aaf-b19637e4f291",
+                    "expectedControlType": "DiscreteButton",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -314,6 +323,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "centrism",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "385607c5-2963-4aac-90bf-5c4b988697dd",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "centrism",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7080866f-fcbd-4e7c-9de7-da34a00eb24d",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70cf8eee-9a7c-43eb-81b9-eec3fd83e8e8",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

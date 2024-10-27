@@ -24,7 +24,7 @@ public class ModuleSpeed
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         // if (dir.x < 0 != dir.y < 0) angle += 180f;
         // if (dir.y * dir.x < 0) angle += 180f;
-        module.GetRotation();
+        // module.GetRotation();
         float degAngle = angle * Mathf.Deg2Rad;
         vector = new Vector3(speed * Mathf.Cos(degAngle), 0, speed * Mathf.Sin(degAngle));
         // Debug.DrawRay(module.transform.position, vector, Color.magenta);
@@ -33,7 +33,7 @@ public class ModuleSpeed
 
     public void RunModule()
     {
-        module.SetInputAndRotation(speed, new Vector3(direction.x, 0, direction.y));
+        // module.SetInputAndRotation(speed, new Vector3(direction.x, 0, direction.y));
     }
 
     public Vector3 GetWorldDirection()

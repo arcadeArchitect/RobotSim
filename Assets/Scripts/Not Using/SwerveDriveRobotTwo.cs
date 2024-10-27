@@ -79,7 +79,8 @@ public class SwerveDriveRobotTwo : MonoBehaviour
 
     private Vector2 ModuleOutput(Module module, Vector2 desiredTranslation, float desiredRotation)
     {
-        return desiredTranslation + desiredRotation * Vector2.Perpendicular(module.GetOffset());
+        // return desiredTranslation + desiredRotation * Vector2.Perpendicular(module.GetOffset());
+        return Vector2.zero;
     }
 
     private float GetHyp(float a, float b)
