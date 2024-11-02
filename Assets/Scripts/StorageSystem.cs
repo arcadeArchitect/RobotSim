@@ -1,12 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class StorageSystem : Subsystem
 {
+    private enum ShootingMode
+    {
+        MiddleFirst,
+        StorageOrder
+    }
+    
     [SerializeField] private int maxStoredProjectiles = 3;
     [SerializeField] private ProjectileStorage[] projectileStorages;
+    [SerializeField] private ShootingMode shootingMode;
+    private readonly Queue<int> storageOrderIndices = new();
+    [SerializeField] private List<int> storageOrder = new();
+
+    private void Update()
+    {
+        storageOrder = new List<int>(storageOrderIndices.ToArray());
+    }
 
     public bool StoreProjectile(Projectile projectile)
     {
@@ -15,6 +31,10 @@ public class StorageSystem : Subsystem
         ProjectileStorage storage = GetNextEmptyProjectileStorage();
         storage.Store(projectile);
         projectile.Store(storage.storageTransform);
+        
+        if (shootingMode == ShootingMode.StorageOrder)
+            storageOrderIndices.Enqueue(Array.IndexOf(projectileStorages, storage));
+        
         return true;
     }
 
@@ -22,7 +42,6 @@ public class StorageSystem : Subsystem
     {
         if (projectileStorages.Length == 0) return;
         
-        int storedProjectileIndex = GetStoredProjectileCount() - 1;
         foreach (var storage in projectileStorages)
         {
             Gizmos.color = (storage.isFull) ? Color.green : Color.red;
@@ -32,36 +51,20 @@ public class StorageSystem : Subsystem
 
     private int GetStoredProjectileCount()
     {
-        int count = 0;
-        foreach (var projectileStorage in projectileStorages)
-        {
-            if (projectileStorage.isFull)
-                ++count;
-        }
-
-        return count;
+        return projectileStorages.Count(projectileStorage => projectileStorage.isFull);
     }
     
     private ProjectileStorage GetNextFullProjectileStorage()
     {
-        foreach (var projectileStorage in projectileStorages)
-        {
-            if (projectileStorage.isFull)
-                return projectileStorage;
-        }
+        if (shootingMode == ShootingMode.MiddleFirst)
+            return projectileStorages.FirstOrDefault(projectileStorage => projectileStorage.isFull);
 
         return null;
     }
 
     private ProjectileStorage GetNextEmptyProjectileStorage()
     {
-        foreach (var projectileStorage in projectileStorages)
-        {
-            if (!projectileStorage.isFull)
-                return projectileStorage;
-        }
-
-        return null;
+        return projectileStorages.FirstOrDefault(projectileStorage => !projectileStorage.isFull);
     }
 
     public bool CanShoot()
@@ -71,6 +74,8 @@ public class StorageSystem : Subsystem
 
     public Projectile RemoveNextProjectile()
     {
+        if (shootingMode == ShootingMode.StorageOrder)
+            return projectileStorages[storageOrderIndices.Dequeue()].Remove();
         return GetNextFullProjectileStorage().Remove();
     }
 }
@@ -91,7 +96,7 @@ public class ProjectileStorage
     public Projectile Remove()
     {
         Projectile removedProjectile = projectile;
-        this.projectile = null;
+        projectile = null;
         isFull = false;
         return removedProjectile;
     }

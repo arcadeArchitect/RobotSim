@@ -8131,6 +8131,8 @@ MonoBehaviour:
   - storageTransform: {fileID: 103016044}
     isFull: 0
     projectile: {fileID: 0}
+  shootingMode: 1
+  storageOrder: 
 --- !u!1 &1743640371
 GameObject:
   m_ObjectHideFlags: 0
