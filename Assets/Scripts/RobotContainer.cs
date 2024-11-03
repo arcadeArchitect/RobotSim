@@ -21,15 +21,13 @@ public class RobotContainer : MonoBehaviour
 
     public void ToggleFieldCentricInput(InputAction.CallbackContext context)
     {
-        bool button = context.ReadValueAsButton();
-        if (!button) return;
+        if (!context.ReadValueAsButton()) return;
         driveSystem.ToggleFieldCentric();
     }
 
     public void ShootInput(InputAction.CallbackContext context)
     {
-        bool button = context.ReadValueAsButton();
-        isShooting = button;
+        isShooting = context.ReadValueAsButton();
         // if (!button || !storageSystem.CanShoot()) return;
         // Projectile projectile = storageSystem.RemoveNextProjectile();
         // shooterSystem.Shoot(projectile);
@@ -45,8 +43,7 @@ public class RobotContainer : MonoBehaviour
 
     private void Update()
     {
-        if (!(isShooting && shooterSystem.CanShoot() && storageSystem.CanShoot())) return;
-        Projectile projectile = storageSystem.RemoveNextProjectile();
-        shooterSystem.Shoot(projectile);
+        if (!(isShooting && shooterSystem.CanShoot && storageSystem.CanShoot())) return;
+        shooterSystem.Shoot(storageSystem.RemoveNextProjectile());
     }
 }

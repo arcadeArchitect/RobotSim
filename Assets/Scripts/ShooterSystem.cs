@@ -6,17 +6,26 @@ public class ShooterSystem : Subsystem
 {
     [SerializeField] private Transform shooterTransform;
     [SerializeField] private float shootForce = 10f;
-    [SerializeField] private float lastTimeShot = Mathf.NegativeInfinity;
     [SerializeField] private float shootDelay = 0.5f;
+    public bool CanShoot { get; private set; }
+    private WaitForSeconds shootWait;
 
-    public bool CanShoot()
+    private void Start()
     {
-        return Time.time >= lastTimeShot + shootDelay;
+        shootWait = new WaitForSeconds(shootDelay);
+        CanShoot = true;
     }
 
     public void Shoot(Projectile projectile)
     {
         projectile.Shoot(shooterTransform, shootForce);
-        lastTimeShot = Time.time;
+        CanShoot = false;
+        StartCoroutine(ReloadCoroutine());
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        yield return shootWait;
+        CanShoot = true;
     }
 }

@@ -94,7 +94,7 @@ public class DriveSystem : Subsystem
         backLeftSpeed /= max;
     }
 
-    private float GetHyp(float a, float b)
+    private static float GetHyp(float a, float b)
     {
         return Mathf.Sqrt(Mathf.Pow(a, 2) + Mathf.Pow(b, 2));
     }
