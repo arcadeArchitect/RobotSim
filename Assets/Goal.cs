@@ -13,6 +13,6 @@ public class Goal : MonoBehaviour
         if (!projectile) return;
         
         Debug.Log("Adding score!");
-        ScoreManager.instance.AddScore(team, 1);
+        ScoreManager.Instance.AddScore(team, 1);
     }
 }
