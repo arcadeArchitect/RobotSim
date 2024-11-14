@@ -6,10 +6,12 @@ public class Projectile : MonoBehaviour
 {
     private new Rigidbody rigidbody;
     public bool IsStored {private set; get;}
+    private Transform parentTransform;
 
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
+        parentTransform = transform.parent;
     }
 
     public void Store(Transform storageParent)
@@ -22,7 +24,7 @@ public class Projectile : MonoBehaviour
 
     public void Shoot(Transform shooterTransform, float force)
     {
-        transform.SetParent(null);
+        transform.SetParent(parentTransform);
         rigidbody.constraints = RigidbodyConstraints.None;
         transform.position = shooterTransform.position;
         rigidbody.AddForce(shooterTransform.forward * force, ForceMode.Impulse);
