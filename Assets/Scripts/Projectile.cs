@@ -16,18 +16,23 @@ public class Projectile : MonoBehaviour
 
     public void Store(Transform storageParent)
     {
+        rigidbody.isKinematic = true;
         rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         transform.SetParent(storageParent);
         transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
         IsStored = true;
     }
 
     public void Shoot(Transform shooterTransform, float force)
     {
         transform.SetParent(parentTransform);
+        rigidbody.isKinematic = false;
         rigidbody.constraints = RigidbodyConstraints.None;
         transform.position = shooterTransform.position;
+        transform.forward = shooterTransform.forward;
         rigidbody.AddForce(shooterTransform.forward * force, ForceMode.Impulse);
+        rigidbody.angularVelocity = Vector3.zero;
         IsStored = false;
         // Debug.Log(gameObject.name + " has been shot");
     }

@@ -9,6 +9,7 @@ public class IntakeSystem : Subsystem
     private void OnTriggerStay(Collider other)
     {
         projectile = other.GetComponent<Projectile>();
+        if (!projectile) projectile = other.GetComponentInParent<Projectile>();
         if (!projectile || projectile.IsStored) return;
             
         /*bool didStore = */robotContainer.storageSystem.StoreProjectile(projectile);

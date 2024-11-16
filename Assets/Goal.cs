@@ -10,6 +10,7 @@ public class Goal : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         projectile = other.GetComponent<Projectile>();
+        if (!projectile) projectile = other.GetComponentInParent<Projectile>();
         if (!projectile) return;
         
         Debug.Log("Adding score!");
