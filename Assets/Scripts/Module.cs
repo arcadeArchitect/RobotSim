@@ -31,6 +31,14 @@ public class Module : MonoBehaviour
 
     public void SetInputAndRotation(float input, float rotation)
     {
+        if (input < 0.01f)
+        {
+            SetInput(0);
+            motor.SetBrake(1000);
+            return;
+        }
+        
+        motor.SetBrake(0);
         SetInput(input);
         SetRotation(rotation);
     }

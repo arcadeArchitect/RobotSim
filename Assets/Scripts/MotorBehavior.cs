@@ -19,6 +19,11 @@ public class MotorBehavior : MonoBehaviour
         return input * maxTorque;
     }
 
+    public void SetBrake(float force)
+    {
+        wheel.SetBrake(force);
+    }
+
     public void SetInput(float input)
     {
         this.input = Mathf.Clamp(input, -1, 1);

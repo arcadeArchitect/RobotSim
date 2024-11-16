@@ -33,4 +33,9 @@ public class WheelBehavior : MonoBehaviour
     {
         wc.motorTorque = torque;
     }
+
+    public void SetBrake(float force)
+    {
+        wc.brakeTorque = force;
+    }
 }
