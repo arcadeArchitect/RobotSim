@@ -38,7 +38,7 @@ public class StorageSystem : Subsystem
         return true;
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         if (projectileStorages.Length == 0) return;
         
