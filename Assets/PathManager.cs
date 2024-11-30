@@ -41,7 +41,7 @@ public class PathManager : MonoBehaviour
     }
 
     private void OnDrawGizmos()
-    {   
+    {
         foreach (Node node in nodes)
         {
             Gizmos.color = node.IsFirstNode() ? Color.cyan : node.IsLastNode() ? Color.red : Color.green;

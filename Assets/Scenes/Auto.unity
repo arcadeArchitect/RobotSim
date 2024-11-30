@@ -170,13 +170,13 @@ MonoBehaviour:
   editPath: 1
   nodes:
   - position: {x: 0.8497722, y: 0, z: 2.482296}
-    rotation: -338.49185
+    rotation: 155.34859
   - position: {x: 2.0735607, y: 0, z: 1.0973645}
-    rotation: -311.32352
+    rotation: -141.33524
   - position: {x: 4.4629016, y: 0, z: 1.981699}
-    rotation: -248.86395
+    rotation: -68.86395
   - position: {x: 5.61, y: 0, z: 2.54}
-    rotation: -270.58215
+    rotation: -90.58215
   pathDivisions: 2
   robotChassis: {fileID: 1984741498}
   chassisScale: {x: 0.6223, y: 0.127, z: 0.6223}

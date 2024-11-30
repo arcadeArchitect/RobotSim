@@ -22,7 +22,7 @@ public class Node
     public float SetRotation(float angle)
     {
         angle %= 360;
-        rotation = (angle > 180) ? angle - 360 : angle;
+        rotation = (angle > 180) ? angle - 360 : (angle < -180) ? angle + 360 : angle;
         return rotation;
     }
 
