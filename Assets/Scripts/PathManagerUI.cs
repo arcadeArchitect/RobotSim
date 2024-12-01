@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -14,23 +15,55 @@ public class PathManagerUI : Editor
 
     public void OnSceneGUI()
     {
-        if (!pathManager || !pathManager.editPath) return;
+        if (!pathManager) return;
 
-        foreach (var node in pathManager.nodes)
+        if (pathManager.editPath)
         {
-            var newPosition = node.position;
-            var newRotation = Quaternion.Euler(0, -node.rotation, 0);
-            Handles.TransformHandle(ref newPosition, ref newRotation);
-
-            if (newPosition != node.position)
+            foreach (var node in pathManager.nodes)
             {
-                newPosition.y = 0;
-                node.position = newPosition;
-            }
+                var newPosition = node.position;
+                var newRotation = Quaternion.Euler(0, -node.rotation, 0);
+                Handles.TransformHandle(ref newPosition, ref newRotation);
             
-            if (!Mathf.Approximately(newRotation.eulerAngles.y, node.rotation))
+                // var newPosition = Handles.PositionHandle(node.position, quaternion.identity);
+            
+                if (newPosition != node.position)
+                {
+                    newPosition.y = 0;
+                    node.position = newPosition;
+                }
+            
+                if (!Mathf.Approximately(newRotation.eulerAngles.y, node.rotation))
+                {
+                    node.SetRotation(-newRotation.eulerAngles.y);
+                }
+            }
+        }
+
+        if (pathManager.editControlPoints)
+        {
+            foreach (var node in pathManager.nodes)
             {
-                node.SetRotation(-newRotation.eulerAngles.y);
+
+                if (node.display != ControlDisplay.Two)
+                {
+                    var newControlPointOnePosition = Handles.PositionHandle(node.controlPointOne, quaternion.identity);
+
+                    if (newControlPointOnePosition != node.controlPointOne)
+                    {
+                        node.SetGlobalControlPointOne(newControlPointOnePosition);
+                    }
+                }
+                
+                if (node.display != ControlDisplay.One)
+                {
+                    var newControlPointTwoPosition = Handles.PositionHandle(node.controlPointTwo, quaternion.identity);
+
+                    if (newControlPointTwoPosition != node.controlPointTwo)
+                    {
+                        node.SetGlobalControlPointTwo(newControlPointTwoPosition);
+                    }
+                }
             }
         }
     }

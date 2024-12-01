@@ -9,6 +9,12 @@ public class Node
     public float rotation;
     public int index { get; private set; }
 
+    public Node(Vector3 position, int index)
+    {
+        this.position = position;
+        this.index = index;
+    }
+
     public void SetPreviousNode(Node node)
     {
         previousNode = node;
@@ -24,6 +30,11 @@ public class Node
         angle %= 360;
         rotation = (angle > 180) ? angle - 360 : (angle < -180) ? angle + 360 : angle;
         return rotation;
+    }
+
+    public float FixRotation()
+    {
+        return SetRotation(rotation);
     }
 
     public float GetDistanceToNextNode()

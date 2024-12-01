@@ -6468,7 +6468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheel: {fileID: 1863901658}
-  maxTorque: 1500
+  maxTorque: 150
 --- !u!4 &981370194
 Transform:
   m_ObjectHideFlags: 0
@@ -8396,7 +8396,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289789976}
   serializedVersion: 4
-  m_Mass: 579
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -11276,7 +11276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheel: {fileID: 1086285906}
-  maxTorque: 1500
+  maxTorque: 150
 --- !u!4 &1790848401
 Transform:
   m_ObjectHideFlags: 0
@@ -11426,7 +11426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheel: {fileID: 2061110848}
-  maxTorque: 1500
+  maxTorque: 150
 --- !u!4 &1823606384
 Transform:
   m_ObjectHideFlags: 0
@@ -13154,7 +13154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheel: {fileID: 1197623841}
-  maxTorque: 1500
+  maxTorque: 150
 --- !u!4 &2091147135
 Transform:
   m_ObjectHideFlags: 0
