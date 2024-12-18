@@ -10,8 +10,9 @@ public class PathManager : MonoBehaviour
     [SerializeField] private bool drawControls = true;
     public List<BezierNode> nodes = new();
     public List<Node> path = new();
-    [Range(1, 50)] [SerializeField] private int pathDivisions = 3;
+    [Range(1, 100)] [SerializeField] private int pathDivisions = 3;
     [SerializeField] private bool showPathNodes;
+    public bool showDerivatives;
     [SerializeField] private Transform robotChassis;
     [SerializeField] private Vector3 chassisScale;
     [SerializeField] private float chassisYOffset = 0.2f;
@@ -68,31 +69,45 @@ public class PathManager : MonoBehaviour
         {
             Node newBezierNode = new Node(node.position, node.index);
             newBezierNode.SetRotation(node.rotation);
-            ++index;
 
             if (node.IsLastNode())
             {
-                node.SetIndex(-1);
-                path.Add(node);
+                newBezierNode.SetIndex(-1);
+                path.Add(newBezierNode);
                 continue;
             }
             
-            path.Add(node);
+            path.Add(newBezierNode);
             
             Vector3 a = node.position;
             Vector3 b = node.controlPointTwo;
             Vector3 c = ((BezierNode)node.nextNode).controlPointOne;
             Vector3 d = node.nextNode.position;
 
-            for (float i = spacing; i < 1; i += spacing)
+
+
+            node.vel = (-3 * a + 3 * b);
+            
+            for (float t = spacing; t < 1; t += spacing)
             {
-                Vector3 nodePosition = Mathf.Pow(1 - i, 3) * a + 3 * Mathf.Pow(1 - i, 2) * i * b + 3 * (1 - i) * Mathf.Pow(i, 2) * c + Mathf.Pow(i, 3) * d;
-                Node newNode = new Node(nodePosition, index);
+
+                ++index;
+                // Vector3 nodePosition = Mathf.Pow(1 - t, 3) * a + 3 * Mathf.Pow(1 - t, 2) * t * b + 3 * (1 - t) * Mathf.Pow(t, 2) * c + Mathf.Pow(t, 3) * d;
+                Vector3 nodePosition = a + t * (-3 * a + 3 * b) + Mathf.Pow(t, 2) * (3 * a - 6 * b + 3 * c) +
+                                       Mathf.Pow(t, 3) * (-a + 3 * b - 3 * c + d);
                 
+                Vector3 nodeVelocity = (-3 * a + 3 * b) + 2 * t * (3 * a - 6 * b + 3 * c) +
+                                       3 * Mathf.Pow(t, 2) * (-a + 3 * b - 3 * c + d);
+                
+                Node newNode = new Node(nodePosition, index)
+                {
+                    bezierIndex = index,
+                    tVal = spacing,
+                    vel = nodeVelocity,
+                };
+
                 path.Add(newNode);
             }
-
-            ++index;
         }
         
         for (int i = 0; i < path.Count; ++i)
@@ -101,6 +116,42 @@ public class PathManager : MonoBehaviour
             if (!node.IsFirstNode()) node.SetPreviousNode(path[i - 1]);
             if (!node.IsLastNode()) node.SetNextNode(path[i + 1]);
         }
+    }
+
+    public Vector3 PathVel(float tVal)
+    {
+        BezierNode node = nodes[(int)tVal];
+        
+            
+        Vector3 a = node.position;
+        Vector3 b = node.controlPointTwo;
+        Vector3 c = ((BezierNode)node.nextNode).controlPointOne;
+        Vector3 d = node.nextNode.position;
+
+        float t = tVal - (int)tVal;
+                
+        Vector3 nodeVelocity = (-3 * a + 3 * b) + 2 * t * (3 * a - 6 * b + 3 * c) +
+                               3 * Mathf.Pow(t, 2) * (-a + 3 * b - 3 * c + d);
+        
+        return nodeVelocity;
+    }
+
+    public Vector3 PathPoint(float tVal)
+    {
+        BezierNode node = nodes[(int)tVal];
+        
+            
+        Vector3 a = node.position;
+        Vector3 b = node.controlPointTwo;
+        Vector3 c = ((BezierNode)node.nextNode).controlPointOne;
+        Vector3 d = node.nextNode.position;
+
+        float t = tVal - (int)tVal;
+        
+        Vector3 nodePosition = a + t * (-3 * a + 3 * b) + Mathf.Pow(t, 2) * (3 * a - 6 * b + 3 * c) +
+                               Mathf.Pow(t, 3) * (-a + 3 * b - 3 * c + d);
+        
+        return nodePosition;
     }
 
     private void OnDrawGizmos()
@@ -143,6 +194,7 @@ public class PathManager : MonoBehaviour
             if (node.nextNode == null) return;
             Gizmos.color = Color.white;
             Gizmos.DrawLine(node.position, node.nextNode.position);
+            if (showDerivatives) Gizmos.DrawRay(node.position, node.vel);
         }
     }
 }

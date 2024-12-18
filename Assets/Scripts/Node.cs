@@ -4,10 +4,15 @@
 public class Node
 {
     public Node previousNode { get; private set; }
-    public Node nextNode { get; private set; }
+    public Node nextNode;// { get; private set; }
     public Vector3 position;
     public float rotation;
-    public int index { get; private set; }
+    public int index;// { get; private set; }
+    public int nextNodeIndex = -100;
+
+    public int bezierIndex;
+    public float tVal;
+    public Vector3 vel;
 
     public Node(Vector3 position, int index)
     {
@@ -23,6 +28,7 @@ public class Node
     public void SetNextNode(Node node)
     {
         nextNode = node;
+        nextNodeIndex = node.index;
     }
 
     public float SetRotation(float angle)

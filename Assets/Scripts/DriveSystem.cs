@@ -23,20 +23,77 @@ public class DriveSystem : Subsystem
 
     [Space] [SerializeField] private bool fieldCentric = true;
 
-    private Vector3 lastInput;
+    [SerializeField] private Vector3 lastInput;
     private Vector2 translation;
 
     private float frontRightSpeed, frontLeftSpeed, backRightSpeed, backLeftSpeed;
     private float frontRightAngle, frontLeftAngle, backRightAngle, backLeftAngle;
 
+    public bool isAutoing;
+    private Node currentNode;
+    public PathManager pathManager;
+    public int nodeIndex;
+
+    public float tVal;
+    public float tStep = 0.05f;
+    public float tJump = 20;
+
+    public Vector3 currentNodePos;
+
     private void Start()
     {
+        currentNode = pathManager.path[0];
         length = frontRightModule.GetWheelOffset().z - backRightModule.GetWheelOffset().z;
         width = frontRightModule.GetWheelOffset().x - frontLeftModule.GetWheelOffset().x;
     }
 
     public void Update()
     {
+        if (isAutoing)
+        {
+            // currentNode = pathManager.path[nodeIndex];
+            // if (Vector3.Distance(transform.position, currentNode.position) <
+            //     Vector3.Distance(transform.position, currentNode.nextNode.position))
+            // {
+            //     nodeIndex++;
+            //     currentNode = currentNode.nextNode;
+            // }
+
+            // currentNode = pathManager.path[nodeIndex];
+            // Vector2 a = new Vector2(transform.position.x, transform.position.z);
+            // Vector2 b = new Vector2(currentNode.position.x, currentNode.position.z);
+            // if ((a-b).magnitude < 0.1f)
+            // {
+            //     nodeIndex++;
+            //     currentNode = pathManager.path[nodeIndex];
+            //     // currentNode = currentNode.nextNode;
+            // }
+            //
+            // Vector3 driveInput = new Vector3(currentNode.vel.x, currentNode.vel.z, 0);
+
+            currentNodePos = pathManager.PathPoint(tVal);
+            for (int i = 0; i < tJump + tStep; i++)
+            {
+                Vector3 newNodePos = pathManager.PathPoint(tVal + tStep);
+                if (Vector3.Distance(transform.position, currentNodePos) >
+                    Vector3.Distance(transform.position, newNodePos))
+                    tVal += tStep;
+            }
+
+            if (tVal + tStep > pathManager.nodes.Count - 1)
+            {
+                isAutoing = false;
+                lastInput = Vector3.zero;
+                return;
+            }
+            
+            Vector3 nodeVel = pathManager.PathVel(tVal);
+            nodeVel += (currentNodePos - transform.position).normalized;
+            nodeVel.Normalize();
+            
+            Vector3 driveInput = new Vector3(nodeVel.x, nodeVel.z, 0);
+            lastInput = driveInput;
+        }
         SwerveDrive(lastInput);
         frontRightModule.SetInputAndRotation(frontRightSpeed, frontRightAngle);
         frontLeftModule.SetInputAndRotation(frontLeftSpeed, frontLeftAngle);
@@ -46,6 +103,7 @@ public class DriveSystem : Subsystem
 
     public void SwerveDrive(InputAction.CallbackContext context)
     {
+        if (isAutoing) return;
         lastInput = context.ReadValue<Vector3>();
     }
 
@@ -108,5 +166,7 @@ public class DriveSystem : Subsystem
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(V2ToV3(translation)));
+        
+        Gizmos.DrawWireSphere(currentNodePos, 0.1f);
     }
 }
