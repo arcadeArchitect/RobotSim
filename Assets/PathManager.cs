@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [ExecuteInEditMode]
 public class PathManager : MonoBehaviour
 {
+    [FormerlySerializedAs("showPath")] public bool drawGizmos = true;
     public bool editPath;
     public bool editControlPoints;
     [SerializeField] private bool drawControls = true;
@@ -136,9 +138,11 @@ public class PathManager : MonoBehaviour
         return nodeVelocity;
     }
 
-    public Vector3 PathPoint(float tVal)
+    public Vector3? PathPoint(float tVal)
     {
         BezierNode node = nodes[(int)tVal];
+
+        if ((BezierNode)node.nextNode == null) return null;
         
             
         Vector3 a = node.position;
@@ -156,7 +160,7 @@ public class PathManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        
+        if (!drawGizmos) return;
         foreach (BezierNode node in nodes)
         {
             if (!drawControls) break;

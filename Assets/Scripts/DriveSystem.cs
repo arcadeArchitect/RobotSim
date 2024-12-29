@@ -37,8 +37,11 @@ public class DriveSystem : Subsystem
     public float tVal;
     public float tStep = 0.05f;
     public float tJump = 20;
+    [Range(0, 0.9f)] public float pathFollowPriority = 0.9f;
 
-    public Vector3 currentNodePos;
+    private Vector3? currentNodePos;
+
+    public Transform robotBody;
 
     private void Start()
     {
@@ -51,44 +54,35 @@ public class DriveSystem : Subsystem
     {
         if (isAutoing)
         {
-            // currentNode = pathManager.path[nodeIndex];
-            // if (Vector3.Distance(transform.position, currentNode.position) <
-            //     Vector3.Distance(transform.position, currentNode.nextNode.position))
-            // {
-            //     nodeIndex++;
-            //     currentNode = currentNode.nextNode;
-            // }
-
-            // currentNode = pathManager.path[nodeIndex];
-            // Vector2 a = new Vector2(transform.position.x, transform.position.z);
-            // Vector2 b = new Vector2(currentNode.position.x, currentNode.position.z);
-            // if ((a-b).magnitude < 0.1f)
-            // {
-            //     nodeIndex++;
-            //     currentNode = pathManager.path[nodeIndex];
-            //     // currentNode = currentNode.nextNode;
-            // }
-            //
-            // Vector3 driveInput = new Vector3(currentNode.vel.x, currentNode.vel.z, 0);
-
             currentNodePos = pathManager.PathPoint(tVal);
             for (int i = 0; i < tJump + tStep; i++)
             {
-                Vector3 newNodePos = pathManager.PathPoint(tVal + tStep);
-                if (Vector3.Distance(transform.position, currentNodePos) >
-                    Vector3.Distance(transform.position, newNodePos))
+                Vector3? newNodePos = pathManager.PathPoint(tVal + tStep);
+                
+                if (currentNodePos == null || newNodePos == null)
+                {
+                    isAutoing = false;
+                    lastInput = Vector3.zero;
+                    pathManager.nodes[^1].Act();
+                    return;
+                }
+                
+                if (Vector3.Distance(transform.position, currentNodePos.Value) >
+                    Vector3.Distance(transform.position, newNodePos.Value))
                     tVal += tStep;
-            }
-
-            if (tVal + tStep > pathManager.nodes.Count - 1)
-            {
-                isAutoing = false;
-                lastInput = Vector3.zero;
-                return;
             }
             
             Vector3 nodeVel = pathManager.PathVel(tVal);
-            nodeVel += (currentNodePos - transform.position).normalized;
+            if (currentNodePos != null)
+            {
+                Vector3 distanceToNode = currentNodePos.Value - transform.position;
+                nodeVel = (1 - pathFollowPriority) * nodeVel + pathFollowPriority * distanceToNode;
+            }
+
+            BezierNode closestBezier = pathManager.nodes[(int)tVal];
+            if (Vector3.Distance(transform.position, closestBezier.position) < 0.5f)
+                closestBezier.Act();
+            
             nodeVel.Normalize();
             
             Vector3 driveInput = new Vector3(nodeVel.x, nodeVel.z, 0);
@@ -157,7 +151,7 @@ public class DriveSystem : Subsystem
         return Mathf.Sqrt(Mathf.Pow(a, 2) + Mathf.Pow(b, 2));
     }
 
-    private Vector3 V2ToV3(Vector2 v)
+    private static Vector3 V2ToV3(Vector2 v)
     {
         return new Vector3(v.x, 0f, v.y);
     }
@@ -166,7 +160,12 @@ public class DriveSystem : Subsystem
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawRay(transform.position, transform.TransformDirection(V2ToV3(translation)));
-        
-        Gizmos.DrawWireSphere(currentNodePos, 0.1f);
+
+        if (currentNodePos != null) Gizmos.DrawWireSphere(currentNodePos.Value, 0.1f);
+    }
+
+    public void SetRotation(float angle)
+    {
+        robotBody.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 }

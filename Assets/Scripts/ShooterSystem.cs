@@ -28,4 +28,9 @@ public class ShooterSystem : Subsystem
         yield return shootWait;
         CanShoot = true;
     }
+
+    public void ShootNextProjectile()
+    {
+        Shoot(robotContainer.storageSystem.RemoveNextProjectile());
+    }
 }

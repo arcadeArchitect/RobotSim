@@ -19,9 +19,9 @@ public class Module : MonoBehaviour
         motor.SetInputAndTorque(input);
     }
 
-    public void SetInput(float input)
+    public void SetInput(float val)
     {
-        this.input = Mathf.Clamp(input, 0, 1);
+        input = Mathf.Clamp(val, 0, 1);
     }
 
     private void SetRotation(float rotation)
@@ -29,18 +29,23 @@ public class Module : MonoBehaviour
         motor.GetWheel().transform.localRotation = Quaternion.Euler(0, rotation, 0);
     }
 
-    public void SetInputAndRotation(float input, float rotation)
+    public void SetInputAndRotation(float val, float rotation)
     {
-        if (input < 0.01f)
+        if (val < 0.01f)
         {
             SetInput(0);
-            motor.SetBrake(1000);
+            Brake();
             return;
         }
         
         motor.SetBrake(0);
-        SetInput(input);
+        SetInput(val);
         SetRotation(rotation);
+    }
+    
+    public void Brake()
+    {
+        motor.SetBrake(1000);
     }
 
     public Vector3 GetWheelOffset()

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class BezierNode : Node
@@ -7,6 +8,9 @@ public class BezierNode : Node
     [HideInInspector] public ControlDisplay display = ControlDisplay.Both;
     
     public Vector3 controlOffset = Vector3.zero;
+
+    public UnityEvent action;
+    private bool didAct;
 
     public BezierNode(Vector3 position, int index) : base(position, index) {}
 
@@ -35,6 +39,16 @@ public class BezierNode : Node
         controlPointTwo = position - controlOffset;
         
         display = IsFirstNode() ? ControlDisplay.Two : IsLastNode() ? ControlDisplay.One : ControlDisplay.Both;
+    }
+
+
+    public void Act()
+    {
+        if (didAct) return;
+        Debug.Log("Acting");
+        
+        action.Invoke();
+        didAct = true;
     }
 }
 

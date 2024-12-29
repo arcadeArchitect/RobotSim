@@ -30,7 +30,7 @@ public class ArcadeDriveRobot : MonoBehaviour
         rightInput = input.y * moveSensitivity - input.x * turnSensitivity;
         
         // Normalize
-        float factor = Mathf.Max(Mathf.Abs(leftInput), Mathf.Abs(rightInput));;
+        float factor = Mathf.Max(Mathf.Abs(leftInput), Mathf.Abs(rightInput));
         if (factor <= 1) return;
         leftInput /= factor;
         rightInput /= factor;
