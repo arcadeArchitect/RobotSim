@@ -16,13 +16,15 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
     [SerializeField] private int blueScore;
     [SerializeField] private int redScore;
-    [SerializeField] private TMP_Text scoreCounter;
+    [SerializeField] private TMP_Text blueScoreCounter;
+    [SerializeField] private TMP_Text redScoreCounter;
 
     private void Start()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        scoreCounter.text = "Score: 0";
+        blueScoreCounter.text = "0";
+        redScoreCounter.text = "0";
     }
 
     public void AddScore(Team team, int score)
@@ -37,7 +39,8 @@ public class ScoreManager : MonoBehaviour
     
     private void UpdateScoreCounter()
     {
-        scoreCounter.text = "Score: " + blueScore;
+        blueScoreCounter.text = blueScore.ToString();
+        redScoreCounter.text = redScore.ToString();
     }
             
 }
