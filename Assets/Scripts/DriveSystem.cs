@@ -45,7 +45,9 @@ public class DriveSystem : Subsystem
 
     private void Start()
     {
-        currentNode = pathManager.path[0];
+        if (isAutoing)
+            currentNode = pathManager.path[0];
+        
         length = frontRightModule.GetWheelOffset().z - backRightModule.GetWheelOffset().z;
         width = frontRightModule.GetWheelOffset().x - frontLeftModule.GetWheelOffset().x;
     }
