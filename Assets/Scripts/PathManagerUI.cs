@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -68,3 +69,4 @@ public class PathManagerUI : Editor
         }
     }
 }
+#endif

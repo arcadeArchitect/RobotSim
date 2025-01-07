@@ -11,8 +11,7 @@ public class DriveSystem : Subsystem
     [SerializeField] private Module backLeftModule;
     
     [SerializeField] private Gyro gyro;
-
-    [Space] [SerializeField] private float maxTorque = 100f;
+    [Space]
     [SerializeField] private float rotationSpeed = Mathf.PI / 2;
 
     // distance between front and rear wheels (wheelbase)

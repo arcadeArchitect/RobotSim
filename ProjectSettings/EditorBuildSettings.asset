@@ -5,9 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Game.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/2024-Crescendo.unity
+    guid: 25bec49ef9ae3b7458ee08b14a11a278
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2bc4f4fdd8f3fe14fb993306c1e2228a,
       type: 2}
+  m_UseUCBPForAssetBundles: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private new Rigidbody rigidbody;
-    public bool IsStored {private set; get;}
+    public bool isStored {private set; get;}
     private Transform parentTransform;
 
     void Awake()
@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
         transform.SetParent(storageParent);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
-        IsStored = true;
+        isStored = true;
     }
 
     public void Shoot(Transform shooterTransform, float force)
@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
         transform.forward = shooterTransform.forward;
         rigidbody.AddForce(shooterTransform.forward * force, ForceMode.Impulse);
         rigidbody.angularVelocity = Vector3.zero;
-        IsStored = false;
+        isStored = false;
         // Debug.Log(gameObject.name + " has been shot");
     }
 }

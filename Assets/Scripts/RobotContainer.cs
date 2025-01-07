@@ -11,8 +11,12 @@ public class RobotContainer : MonoBehaviour
     public IntakeSystem intakeSystem;
     public StorageSystem storageSystem;
     public ShooterSystem shooterSystem;
+    public ClimbSystem climbSystem;
+    public Transform chassis;
 
     private bool isShooting;
+    private bool isGrabbing;
+    private bool didGrab;
 
     public void Input(InputAction.CallbackContext context)
     {
@@ -28,9 +32,11 @@ public class RobotContainer : MonoBehaviour
     public void ShootInput(InputAction.CallbackContext context)
     {
         isShooting = context.ReadValueAsButton();
-        // if (!button || !storageSystem.CanShoot()) return;
-        // Projectile projectile = storageSystem.RemoveNextProjectile();
-        // shooterSystem.Shoot(projectile);
+    }
+
+    public void GrabInput(InputAction.CallbackContext context)
+    {
+        isGrabbing = context.ReadValueAsButton();
     }
 
     private void Start()
@@ -39,12 +45,18 @@ public class RobotContainer : MonoBehaviour
         intakeSystem.SetRobotContainer(this);
         storageSystem.SetRobotContainer(this);
         shooterSystem.SetRobotContainer(this);
+        climbSystem.SetRobotContainer(this);
     }
 
     private void Update()
     {
-        if (!(isShooting && shooterSystem.CanShoot && storageSystem.CanShoot())) return;
-        // shooterSystem.Shoot(storageSystem.RemoveNextProjectile());
-        shooterSystem.ShootNextProjectile();
+        if (isShooting && shooterSystem.canShoot && storageSystem.CanShoot())
+            shooterSystem.ShootNextProjectile();
+
+        if (isGrabbing && !didGrab)
+        {
+            climbSystem.ToggleGrab();
+        }
+        didGrab = isGrabbing;
     }
 }

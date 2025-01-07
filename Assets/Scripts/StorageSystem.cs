@@ -74,6 +74,7 @@ public class StorageSystem : Subsystem
 
     public Projectile RemoveNextProjectile()
     {
+        if (GetStoredProjectileCount() == 0) return null;
         if (shootingMode == ShootingMode.StorageOrder)
             return projectileStorages[storageOrderIndices.Dequeue()].Remove();
         return GetNextFullProjectileStorage().Remove();

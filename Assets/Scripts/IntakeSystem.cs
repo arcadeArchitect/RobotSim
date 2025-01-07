@@ -10,7 +10,7 @@ public class IntakeSystem : Subsystem
     {
         projectile = other.GetComponent<Projectile>();
         if (!projectile) projectile = other.GetComponentInParent<Projectile>();
-        if (!projectile || projectile.IsStored) return;
+        if (!projectile || projectile.isStored) return;
             
         /*bool didStore = */robotContainer.storageSystem.StoreProjectile(projectile);
         
