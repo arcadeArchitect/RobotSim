@@ -1,20 +1,59 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Grabbable : MonoBehaviour
 {
-    public ArticulationBody attachBody;
-    public Transform robotChassis;
+    public Rigidbody attachedRigidbody;
+    private ArticulationBody articulationBody;
     public bool isBeingGrabbed;
-       
+    private Collider[] colliders;
+    private Vector3 calculatedCOM;
+    private Vector3 startingCOM;
+    private float startingMass;
 
-    public void MoveBody(Vector3 movement)
+    private void Start()
     {
-        robotChassis.Translate(movement, Space.World);
+        colliders = GetComponentsInChildren<Collider>();
+        articulationBody = GetComponent<ArticulationBody>();
+        startingCOM = articulationBody.centerOfMass;
+        startingMass = articulationBody.mass;
     }
 
-    public void Update()
+    private void Update()
     {
-        if (isBeingGrabbed) MoveBody(transform.up * (Time.deltaTime * 0.1f));
+        if (isBeingGrabbed)
+        {
+            CalculateCOM();
+            articulationBody.mass = startingMass + attachedRigidbody.mass;
+            articulationBody.centerOfMass = calculatedCOM;
+        }
+        else
+        {
+            articulationBody.mass = startingMass;
+            articulationBody.centerOfMass = startingCOM;
+        }
+    }
+
+    public void ChangeCollision(Collider c, bool ignore)
+    {
+        foreach (Collider col in colliders)
+            Physics.IgnoreCollision(col, c, ignore);
+        
+        // Debug.Log("Ignoring collision? " + ignore + " btw " + c.name);
+    }
+
+    private void CalculateCOM()
+    {
+        calculatedCOM = transform.InverseTransformPoint((transform.position + transform.TransformPoint(startingCOM)) * startingMass +
+                         attachedRigidbody.worldCenterOfMass * attachedRigidbody.mass) /
+                        (startingMass + attachedRigidbody.mass);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!articulationBody || !attachedRigidbody) return;
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position + transform.TransformPoint(calculatedCOM), 0.5f);
     }
 }

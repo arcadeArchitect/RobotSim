@@ -17,6 +17,7 @@ public class RobotContainer : MonoBehaviour
     private bool isShooting;
     private bool isGrabbing;
     private bool didGrab;
+    private float climbInput;
 
     public void Input(InputAction.CallbackContext context)
     {
@@ -39,6 +40,11 @@ public class RobotContainer : MonoBehaviour
         isGrabbing = context.ReadValueAsButton();
     }
 
+    public void ClimbInput(InputAction.CallbackContext context)
+    {
+        climbInput = context.ReadValue<Vector2>().y;
+    }
+
     private void Start()
     {
         driveSystem.SetRobotContainer(this);
@@ -58,5 +64,8 @@ public class RobotContainer : MonoBehaviour
             climbSystem.ToggleGrab();
         }
         didGrab = isGrabbing;
+        
+        if (climbInput != 0 && climbSystem.isClimbing)
+            climbSystem.Climb(climbInput);
     }
 }
