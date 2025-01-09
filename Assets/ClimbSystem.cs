@@ -22,6 +22,8 @@ public class ClimbSystem : Subsystem
     public Collider closestCollider;
     public Vector3 closestPoint;
     
+    [SerializeField] private Collider groundCollider;
+    
     private void Start()
     {
         climbJoint = GetComponentInParent<SpringJoint>();
@@ -120,8 +122,13 @@ public class ClimbSystem : Subsystem
 
     private void ChangeCollision(bool ignore)
     {
+        if (!lastGrabby) return;
         foreach (Collider col in colliders)
+        {
             lastGrabby.ChangeCollision(col, ignore);
+            Physics.IgnoreCollision(col, groundCollider, ignore);
+        }
+
     }
 
     public void Climb(float input)

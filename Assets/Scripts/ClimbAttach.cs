@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ClimbAttach : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class ClimbAttach : MonoBehaviour
     [SerializeField] private BoxCollider robotSwerveCollider;
     private new Rigidbody rigidbody;
 
-    private const float MaxY = -0.5f;
-    private const float MinY = -1.5f;
+    [SerializeField] private float maxY = -0.2f;
+    [SerializeField] private float minY = -1.8f;
 
 
     private void Start()
@@ -26,21 +27,21 @@ public class ClimbAttach : MonoBehaviour
         if (!target) return;
         
         // rigidbody.position = target.position + target.TransformDirection(climbOffset);
-        transform.position = target.position + target.TransformPoint(climbOffset);
+        transform.position = target.position + target.TransformDirection(climbOffset);
         // rigidbody.MovePosition(target.position + target.TransformDirection(climbOffset));
         
         transform.up = target.up;
         
-        // groundCollider.transform.position = robotSwerveCollider.transform.position;
-        groundCollider.transform.rotation = robotSwerveCollider.transform.rotation;
-        groundCollider.center = groundCollider.transform.InverseTransformPoint(robotSwerveCollider.transform.TransformPoint(robotSwerveCollider.center));
+        //// groundCollider.transform.position = robotSwerveCollider.transform.position;
+        // groundCollider.transform.rotation = robotSwerveCollider.transform.rotation;
+        // groundCollider.center = groundCollider.transform.InverseTransformPoint(robotSwerveCollider.transform.TransformPoint(robotSwerveCollider.center));
     }
 
     public void Move(Vector3 direction)
     {
-        Debug.Log("Climbing in direction: " + direction);
+        // Debug.Log("Climbing in direction: " + direction);
         climbOffset += direction;
-        climbOffset.y = Mathf.Clamp(climbOffset.y, MinY, MaxY);
+        climbOffset.y = Mathf.Clamp(climbOffset.y, minY, maxY);
     }
 
     public void SetOffsetByWorldPos(Vector3 pos)
@@ -49,18 +50,18 @@ public class ClimbAttach : MonoBehaviour
         climbOffset = target.InverseTransformDirection(pos - target.position);
     }
 
-    public void Attach()
+    public void Attach()    
     {
-        Debug.Log("Attach");
+        // Debug.Log("Attach");
         fixedJoint.connectedBody = robot;
-        groundCollider.gameObject.SetActive(true);
+        // groundCollider.gameObject.SetActive(true);
     }
 
     public void Detach()
     {
-        Debug.Log("Detach");
+        // Debug.Log("Detach");
         fixedJoint.connectedBody = null;
-        groundCollider.gameObject.SetActive(false);
+        // groundCollider.gameObject.SetActive(false);
     }
 
     private void OnDrawGizmos()

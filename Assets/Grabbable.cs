@@ -11,10 +11,11 @@ public class Grabbable : MonoBehaviour
     private Vector3 calculatedCOM;
     private Vector3 startingCOM;
     private float startingMass;
+    [SerializeField] private Transform chainParent;
 
     private void Start()
     {
-        colliders = GetComponentsInChildren<Collider>();
+        colliders = chainParent.GetComponentsInChildren<Collider>();
         articulationBody = GetComponent<ArticulationBody>();
         startingCOM = articulationBody.centerOfMass;
         startingMass = articulationBody.mass;
@@ -45,15 +46,16 @@ public class Grabbable : MonoBehaviour
 
     private void CalculateCOM()
     {
-        calculatedCOM = transform.InverseTransformPoint((transform.position + transform.TransformPoint(startingCOM)) * startingMass +
-                         attachedRigidbody.worldCenterOfMass * attachedRigidbody.mass) /
-                        (startingMass + attachedRigidbody.mass);
+        calculatedCOM = transform.InverseTransformDirection((
+                (transform.position + transform.TransformDirection(startingCOM)) * startingMass +
+                attachedRigidbody.worldCenterOfMass * attachedRigidbody.mass) /
+                (startingMass + attachedRigidbody.mass) - transform.position);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (!articulationBody || !attachedRigidbody) return;
         Gizmos.color = Color.green;
-        Gizmos.DrawSphere(transform.position + transform.TransformPoint(calculatedCOM), 0.5f);
+        Gizmos.DrawSphere(transform.position + transform.TransformDirection(calculatedCOM), 0.5f);
     }
 }

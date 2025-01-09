@@ -6,7 +6,7 @@ public class SpeedCounter : MonoBehaviour
     [SerializeField] private TMP_Text text;
     private new Rigidbody rigidbody;
 
-    private const float UnitsToFeet = 3.28084f;
+    [SerializeField] private float unitsToFeet = 3.28084f;
 
     private void Start()
     {
@@ -21,6 +21,6 @@ public class SpeedCounter : MonoBehaviour
     private float GetVelocity()
     {
         Vector3 flatVelocity = new(rigidbody.linearVelocity.x, 0f, rigidbody.linearVelocity.z);
-        return flatVelocity.magnitude * UnitsToFeet;
+        return flatVelocity.magnitude * unitsToFeet;
     }
 }
